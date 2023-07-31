@@ -4,4 +4,4 @@
 
 ![Screenshot](./assets/images/weather-ss.png)
 
-Deployed Link - 
+Deployed Link - https://tojicodes.github.io/weather-dashboard/ 
