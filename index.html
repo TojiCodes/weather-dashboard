@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Weather Dashboard</h1>
+    </header>
+
+    <main>
+        <!-- Search form for city -->
+        <div class="search-container">
+            <form id="search-form">
+                <input type="text" id="city-input" placeholder="Enter a city name">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <!-- Container for the current weather -->
+        <div class="current-weather-container">
+            <h2>Current Weather</h2>
+            <div id="current-weather"></div>
+        </div>
+
+        <!-- Container for the 5-day forecast -->
+        <div class="forecast-container">
+            <h2>5-Day Forecast</h2>
+            <div id="forecast"></div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
