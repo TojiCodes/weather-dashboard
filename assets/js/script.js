@@ -29,10 +29,13 @@ async function getWeatherData(lat, lon) {
 function displayCurrentWeather(data) {
     const currentWeather = document.querySelector('#current-weather');
 
+    // get the current day of the week
+    const dayOfWeek = new Date().toLocaleDateString(undefined, { weekday: 'long' });
+
     // create HTML for the current weather
     const html = `
-        <h3>${data.city.name} (${new Date().toLocaleDateString()})</h3>
-        <p>Temperature: ${data.list[0].main.temp} °C</p>
+        <h3>${data.city.name} (${dayOfWeek}, ${new Date().toLocaleDateString()}) <img src="http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png"></h3>
+        <p>Temperature: ${data.list[0].main.temp} °F</p>
         <p>Humidity: ${data.list[0].main.humidity} %</p>
         <p>Wind Speed: ${data.list[0].wind.speed} m/s</p>
     `;
@@ -50,10 +53,13 @@ function displayForecast(data) {
     for (let i = 0; i < data.list.length; i += 8) {  // only take one reading per day
         const day = data.list[i];
 
+        // get the day of the week
+        const dayOfWeek = new Date(day.dt_txt).toLocaleDateString(undefined, { weekday: 'long' });
+
         const html = `
             <div class="forecast-day">
-                <h4>${new Date(day.dt_txt).toLocaleDateString()}</h4>
-                <p>Temperature: ${day.main.temp} °C</p>
+                <h4>${dayOfWeek}, ${new Date(day.dt_txt).toLocaleDateString()} <img src="http://openweathermap.org/img/wn/${day.weather[0].icon}.png"></h4>
+                <p>Temperature: ${day.main.temp} °F</p>
                 <p>Humidity: ${day.main.humidity} %</p>
                 <p>Wind Speed: ${day.wind.speed} m/s</p>
             </div>
@@ -79,6 +85,26 @@ function saveSearchHistory(city) {
     localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
 }
 
+// Function to display search history from localStorage
+function displaySearchHistory() {
+    // get search history from localStorage
+    let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+    const historyElement = document.querySelector('#search-history');
+    historyElement.innerHTML = ''; // clear previous history
+
+    // create a div for each city in the search history
+    searchHistory.forEach(city => {
+        const div = document.createElement('div');
+        div.textContent = city;
+        div.classList.add("city"); // Add class for styling
+        div.addEventListener('click', function() {
+            fetchWeatherData(city);  // fetch weather data when the div is clicked
+        });
+        historyElement.append(div);
+    });
+}
+
 // Function to load search history from localStorage
 function loadSearchHistory() {
     // get search history from localStorage
@@ -93,23 +119,29 @@ function loadSearchHistory() {
 }
 
 // Use the above functions when form is submitted
-document.querySelector('#search-form').addEventListener('submit', async function(event) {
+document.querySelector('#search-form').addEventListener('submit', function(event) {
     event.preventDefault();
     
     const cityInput = document.querySelector('#city-input');
     const city = cityInput.value;  // get the city name from the input field
     cityInput.value = '';  // clear the input field
 
-    // save the city to the search history
+    // fetch weather data and save the city to the search history
+    fetchWeatherData(city);
     saveSearchHistory(city);
-
-    const coordinates = await getCoordinates(city);
-    const weatherData = await getWeatherData(coordinates.lat, coordinates.lon);
-
-    // Use the weather data to update the UI
-    displayCurrentWeather(weatherData);
-    displayForecast(weatherData);
+    displaySearchHistory();  // display the updated search history
 });
+
+function fetchWeatherData(city) {
+    getCoordinates(city)
+        .then(coordinates => getWeatherData(coordinates.lat, coordinates.lon))
+        .then(weatherData => {
+            // Use the weather data to update the UI
+            displayCurrentWeather(weatherData);
+            displayForecast(weatherData);
+        });
+}
 
 // Load the search history when the page loads
 loadSearchHistory();
+displaySearchHistory();  // display the search history when the page loads

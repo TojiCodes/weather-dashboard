@@ -18,6 +18,14 @@ h1, h2, h3, h4 {
     font-weight: normal;
 }
 
+.search-container, #search-history-container {
+    margin-right: 20px;
+}
+
+#search-history-container, .current-weather-container, .forecast-container {
+    flex-grow: 1;
+}
+
 h3 {
     margin-top: 0;
 }
@@ -41,7 +49,7 @@ h3 {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
-    background-color: #007BFF;
+    background-color: #FF9800; /* Change button color to orange */
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -49,7 +57,7 @@ h3 {
 }
 
 #search-form button:hover {
-    background-color: #0056b3;
+    background-color: #E65100; /* Darker orange on hover */
 }
 
 #search-history {
@@ -58,22 +66,22 @@ h3 {
     margin-bottom: 20px;
 }
 
-#search-history li {
+#search-history .city {
     padding: 10px;
-    background-color: #F7F7F7;
-    border: 1px solid #E0E0E0;
+    background-color: #E1F5FE; /* Light blue background for history items */
+    border: 1px solid #B3E5FC; /* Light blue border for history items */
     border-radius: 4px;
     margin-bottom: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-#search-history li:hover {
-    background-color: #E0E0E0;
+#search-history .city:hover {
+    background-color: #B3E5FC; /* Darker blue on hover */
 }
 
 #current-weather, .forecast-day {
-    background-color: #fff;
+    background-color: #B2EBF2; /* Cyan background for weather and forecast items */
     padding: 20px;
     border-radius: 4px;
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.1);
@@ -103,5 +111,24 @@ h3 {
     .forecast-day {
         flex: 0 1 calc(100%);
         max-width: calc(100%);
+    }
+}
+
+.city {
+    border: 1px solid #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .search-container, #search-history-container {
+        margin-right: 0;
+        margin-bottom: 20px;
     }
 }
